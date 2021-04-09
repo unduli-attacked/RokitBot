@@ -1,0 +1,15 @@
+BUGS:
+- search feature is questionable at best
+- readability of dates is meh
+- links not hyperlinking??
+- make formatting of launches and events match
+
+FEATURES:
+- search by date
+- add args to next and prev functions (ex. "r!nextLaunch 2" would return the 2nd closest launch, and so on)
+- function to list next 10 upcoming launches/events (name and date)
+- "this day in launch history"
+- countdown for upcoming launches/events
+- Out There: assemble multistream views for launches/events
+- Slightly Less Out There: save links to user-created multistreams and provide them on command
+- "day in space" (picks a random space news article published today from the spaceflight news api)
