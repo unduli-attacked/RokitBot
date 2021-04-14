@@ -17,7 +17,7 @@ def formatLaunchInfo(launchJson, launchDateTime):
     else:
         prettyString = ("**Mission Name:** {}\n"+"*Launched on:* {}\n*To:* {}\n*By:* {}\n*From:* {} in {}\n{}").format(launchJson['mission']["name"], launchJson["rocket"]["configuration"]["name"], launchJson["mission"]["orbit"]["abbrev"], launchJson["launch_service_provider"]["name"], launchJson["pad"]["name"], launchJson["pad"]["location"]["name"], dateString)
 
-    if(not launchJson['probability']==None):
+    if(not (launchJson['probability']==None or launchJson['probability']==-1)):
         prettyString+= "**Launch Probability:** {}\n".format(launchJson['probability'])
 
     return prettyString
