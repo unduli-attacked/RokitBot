@@ -23,7 +23,8 @@ async def on_message(message):
             ["getLaunch [keyword]", "Searches for a launch and returns data if found."],
             ["nextEvent", "Sends data on the next space event."],
             ["prevEvent", "Sends data on the most recent space event."],
-            ["getEvent [keyword]", "Searches for an event and returns data if found."]
+            ["getEvent [keyword]", "Searches for an event and returns data if found."],
+            ["dayInSpace", "Returns a space-related news article from the past day."]
         ]
         command = message.content[2:].lower() # lowercase command name
         print(command)
@@ -65,6 +66,8 @@ async def on_message(message):
             embed.description = "Watch the event [here]({}).".format(event[1])
             await message.channel.send(embed=embed)
             # get the most recent space event
+        elif command == "dayinspace":
+            await message.channel.send(fun.getSpaceArticle())
         else:
             embed = discord.Embed()
             embed.description = "I don't know that command. Please use `r!help` for a list of my commands."

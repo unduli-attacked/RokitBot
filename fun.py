@@ -5,6 +5,7 @@ import os
 import datetime
 import pytz
 import urllib.parse
+import random
 
 def formatLaunchInfo(launchJson, launchDateTime):
     edtLaunch = launchDateTime.astimezone(pytz.timezone('US/Eastern'))
@@ -109,3 +110,20 @@ def getNameEvent(name):
 
 def getStarship():
     return ""
+
+def getSpaceArticle():
+    response = requests.get("https://spaceflightnewsapi.net/api/v2/articles?_limit=100")
+
+    jsonified = json.loads(response.text)
+
+    fromToday = []
+
+    for article in jsonified:
+        if abs(datetime.datetime.strptime(article["publishedAt"][:10], "%Y-%m-%d") - datetime.datetime.now()) <= datetime.timedelta(days=1, hours=12):
+            fromToday.append(article)
+
+    art = random.choice(fromToday)
+
+    prettyString = "**{}**\n*{}*\n{}".format(art["title"], art["summary"], art["url"])
+
+    return prettyString
