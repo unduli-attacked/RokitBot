@@ -15,7 +15,7 @@ def formatLaunchInfo(launchJson, launchDateTime):
     if(launchJson['mission']==None):
         prettyString = ("**Mission Name:** {}\n"+"*Launched on:* {}\n*By:* {}\n*From:* {} in {}\n{}").format(launchJson["name"], launchJson["rocket"]["configuration"]["name"], launchJson["launch_service_provider"]["name"], launchJson["pad"]["name"], launchJson["pad"]["location"]["name"], dateString)
     else:
-        prettyString = ("**Mission Name:** {}\n"+"*Launched on:* {}\n*To:* {}\n*By:* {}\n*From:* {} in {}\n{}").format(launchJson['mission']["name"], launchJson["rocket"]["configuration"]["name"], launchJson["mission"]["orbit"]["abbrev"], launchJson["launch_service_provider"]["name"], launchJson["pad"]["name"], launchJson["pad"]["location"]["name"], dateString)
+        prettyString = ("***Mission Name:*** *{}*\n"+"**Launched on:** {}\n**To:** {}\n**By:** {}\n**From:** {} in {}\n{}").format(launchJson['mission']["name"], launchJson["rocket"]["configuration"]["name"], launchJson["mission"]["orbit"]["abbrev"], launchJson["launch_service_provider"]["name"], launchJson["pad"]["name"], launchJson["pad"]["location"]["name"], dateString)
 
     if(not (launchJson['probability']==None or launchJson['probability']==-1)):
         prettyString+= "**Launch Probability:** {}\n".format(launchJson['probability'])
@@ -64,7 +64,7 @@ def formatEventInfo(event, eventDateTime):
     pdtEvent = eventDateTime.astimezone(pytz.timezone('US/Pacific'))
     dateString = "**Date:** {} UTC\n            {} EDT\n            {} MDT\n            {} PDT\n".format(eventDateTime.strftime("%m-%d-%Y, %H:%M:%S"), edtEvent.strftime("%m-%d-%Y, %H:%M:%S"), mdtEvent.strftime("%m-%d-%Y, %H:%M:%S"), pdtEvent.strftime("%m-%d-%Y, %H:%M:%S"))
 
-    prettyString = "**Event Name:** *{}*\n**Event Type:** {}\n**Description:** {}\n**Location:** {}\n{}".format(event['name'], event['type']['name'], event['description'], event['location'], dateString)
+    prettyString = "***Event Name:*** *{}*\n**Event Type:** {}\n**Description:** {}\n**Location:** {}\n{}".format(event['name'], event['type']['name'], event['description'], event['location'], dateString)
 
     if not event['video_url'] == None:
         prettyString += "**Watch Here:** {}".format(event['video_url']) #TODO figure out why tf hyperlinks aren't working
