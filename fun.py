@@ -26,18 +26,11 @@ def getNextLaunch():
     response = requests.get("https://ll.thespacedevs.com/2.0.0/launch/upcoming/") # gets all upcoming launches
     jsonified = json.loads(response.text)
     nextLaunch = jsonified["results"][0] #first launch in the results array
-    dateGood = False
-    launchDateTime = datetime.datetime(2002, 1, 1)
-    n = 0
-    while not dateGood:
-        nextLaunch = jsonified["results"][n] #first launch in the results array
-        launchDate = nextLaunch["net"].split("T")[0]
-        launchTime = nextLaunch["net"].split("T")[1][:8]
+    print(len(jsonified["results"]))
+    launchDate = nextLaunch["net"].split("T")[0]
+    launchTime = nextLaunch["net"].split("T")[1][:8]
 
-        launchDateTime = datetime.datetime(int(launchDate.split("-")[0]), int(launchDate.split("-")[1]), int(launchDate.split("-")[2]), hour=int(launchTime.split(":")[0]), minute=int(launchTime.split(":")[1]), second=int(launchTime.split(":")[2]), tzinfo = pytz.timezone('UTC'))
-
-        n+=1
-        dateGood = launchDateTime < datetime.datetime.now(tz=pytz.timezone('UTC'))
+    launchDateTime = datetime.datetime(int(launchDate.split("-")[0]), int(launchDate.split("-")[1]), int(launchDate.split("-")[2]), hour=int(launchTime.split(":")[0]), minute=int(launchTime.split(":")[1]), second=int(launchTime.split(":")[2]), tzinfo = pytz.timezone('UTC'))
 
     return formatLaunchInfo(nextLaunch, launchDateTime)
 
