@@ -39,7 +39,11 @@ async def on_message(message):
             await message.channel.send(fun.getPrevLaunch())
             # most recent launch
         elif command[:8] == "getevent":
-            await message.channel.send(fun.getNameEvent(command[10:]))
+            event = fun.getNameEvent(command[10:])
+            await message.channel.send(event[0])
+            embed = discord.Embed()
+            embed.description = "Watch the event [here]({}).".format(event[1])
+            await message.channel.send(embed=embed)
             # get a specific launch from date
         elif command[:9] == "getlaunch":
             await message.channel.send(fun.getNameLaunch(command[10:]))
@@ -48,13 +52,23 @@ async def on_message(message):
             await message.channel.send(fun.getStarship())
             # get info on starship
         elif command == "nextevent":
-            await message.channel.send(fun.getNextEvent())
+            event = fun.getNextEvent()
+            await message.channel.send(event[0])
+            embed = discord.Embed()
+            embed.description = "Watch the event [here]({}).".format(event[1])
+            await message.channel.send(embed=embed)
             # get the next space event
         elif command == "prevevent":
-            await message.channel.send(fun.getPrevEvent())
+            event = fun.getPrevEvent()
+            await message.channel.send(event[0])
+            embed = discord.Embed()
+            embed.description = "Watch the event [here]({}).".format(event[1])
+            await message.channel.send(embed=embed)
             # get the most recent space event
         else:
-            await message.channel.send("I don't know that command. Please use `r!help` for a list of my commands.")
+            embed = discord.Embed()
+            embed.description = "I don't know that command. Please use `r!help` for a list of my commands."
+            await message.channel.send(embed=embed)
 
 keep_alive()  
 client.run(os.getenv('TOKEN'))

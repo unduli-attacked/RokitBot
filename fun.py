@@ -66,8 +66,9 @@ def formatEventInfo(event, eventDateTime):
 
     prettyString = "***Event Name:*** *{}*\n**Event Type:** {}\n**Description:** {}\n**Location:** {}\n{}".format(event['name'], event['type']['name'], event['description'], event['location'], dateString)
 
-    if not event['video_url'] == None:
-        prettyString += "**Watch Here:** {}".format(event['video_url']) #TODO figure out why tf hyperlinks aren't working
+    # if not event['video_url'] == None:
+        # prettyString += "[Watch Here]({})".format(event['video_url']) #TODO figure out why tf hyperlinks aren't working
+        
 
     return prettyString
 
@@ -80,7 +81,7 @@ def getNextEvent():
 
     eventDateTime = datetime.datetime(int(eventDate.split("-")[0]), int(eventDate.split("-")[1]), int(eventDate.split("-")[2]), hour=int(eventTime.split(":")[0]), minute=int(eventTime.split(":")[1]), second=int(eventTime.split(":")[2]), tzinfo = pytz.timezone('UTC'))
 
-    return formatEventInfo(nextEvent, eventDateTime)
+    return formatEventInfo(nextEvent, eventDateTime), nextEvent['video_url']
 
 def getPrevEvent():
     response = requests.get("https://ll.thespacedevs.com/2.0.0/event/previous/") # gets all upcoming launches
@@ -91,7 +92,7 @@ def getPrevEvent():
 
     eventDateTime = datetime.datetime(int(eventDate.split("-")[0]), int(eventDate.split("-")[1]), int(eventDate.split("-")[2]), hour=int(eventTime.split(":")[0]), minute=int(eventTime.split(":")[1]), second=int(eventTime.split(":")[2]), tzinfo = pytz.timezone('UTC'))
 
-    return formatEventInfo(prevEvent, eventDateTime)
+    return formatEventInfo(prevEvent, eventDateTime), prevEvent['video_url']
 
 def getNameEvent(name):
     response = requests.get("https://ll.thespacedevs.com/2.0.0/event/?search="+urllib.parse.quote(name)) # gets all upcoming launches
@@ -104,7 +105,7 @@ def getNameEvent(name):
 
     eventDateTime = datetime.datetime(int(eventDate.split("-")[0]), int(eventDate.split("-")[1]), int(eventDate.split("-")[2]), hour=int(eventTime.split(":")[0]), minute=int(eventTime.split(":")[1]), second=int(eventTime.split(":")[2]), tzinfo = pytz.timezone('UTC'))
 
-    return formatEventInfo(nextEvent, eventDateTime)
+    return formatEventInfo(nextEvent, eventDateTime),nextEvent['video_url']
 
 def getStarship():
     return ""
