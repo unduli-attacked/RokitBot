@@ -13,19 +13,36 @@ def formatLaunchInfo(launchJson, launchDateTime):
     dateString = "**Date:** NET {} UTC\n                    {} EDT\n                    {} MDT\n                    {} PDT\n".format(launchDateTime.strftime("%m-%d-%Y, %H:%M:%S"), edtLaunch.strftime("%m-%d-%Y, %H:%M:%S"), mdtLaunch.strftime("%m-%d-%Y, %H:%M:%S"), pdtLaunch.strftime("%m-%d-%Y, %H:%M:%S"))
     prettyString = ""
     if(launchJson['mission']==None):
-        prettyString = ("**Mission Name:** {}\n"+"*Launched on:* {}\n*By:* {}\n*From:* {} in {}\n{}").format(launchJson["name"], launchJson["rocket"]["configuration"]["name"], launchJson["launch_service_provider"]["name"], launchJson["pad"]["name"], launchJson["pad"]["location"]["name"], dateString)
+        prettyString = "**Mission Name:** *{}*\n".format(launchJson["name"])
     else:
-        prettyString = ("***Mission Name:*** *{}*\n"+"**Launched on:** {}\n**To:** {}\n**By:** {}\n**From:** {} in {}\n{}").format(launchJson['mission']["name"], launchJson["rocket"]["configuration"]["name"], launchJson["mission"]["orbit"]["abbrev"], launchJson["launch_service_provider"]["name"], launchJson["pad"]["name"], launchJson["pad"]["location"]["name"], dateString)
+        prettyString = "***Mission Name:*** *{}*\n".format(launchJson["mission"]["name"])
+
+    prettyString+="**Launched on:** {}\n".format(launchJson["rocket"]["configuration"]["name"])
+
+    if not(launchJson["mission"] == None) and not(launchJson["mission"]["orbit"] == None):
+        prettyString+="**To:** {}\n".format(launchJson["mission"]["orbit"]["abbrev"])
+
+    prettyString += "**By:** {}\n".format(launchJson["launch_service_provider"]["name"])
+
+    prettyString+="**From:** {} in {}\n".format(launchJson["pad"]["name"], launchJson["pad"]["location"]["name"])
+
+    prettyString+=dateString
 
     if(not (launchJson['probability']==None or launchJson['probability']==-1)):
         prettyString+= "**Launch Probability:** {}\n".format(launchJson['probability'])
 
     return prettyString
 
-def getNextLaunch():
+def getNextLaunch(pos=0):
     response = requests.get("https://ll.thespacedevs.com/2.0.0/launch/upcoming/") # gets all upcoming launches
+    offset = 0
     jsonified = json.loads(response.text)
-    nextLaunch = jsonified["results"][0] #first launch in the results array
+    while pos >= len(jsonified["results"]) + offset:
+        offset +=10
+        response = requests.get("https://ll.thespacedevs.com/2.0.0/launch/upcoming/?limit=10&offset="+str(offset))
+        jsonified = json.loads(response.text)
+        
+    nextLaunch = jsonified["results"][pos-offset] #first launch in the results array
     print(len(jsonified["results"]))
     launchDate = nextLaunch["net"].split("T")[0]
     launchTime = nextLaunch["net"].split("T")[1][:8]
@@ -34,10 +51,17 @@ def getNextLaunch():
 
     return formatLaunchInfo(nextLaunch, launchDateTime)
 
-def getPrevLaunch():
+def getPrevLaunch(pos=0):
     response = requests.get("https://ll.thespacedevs.com/2.0.0/launch/previous/") # gets all upcoming launches
+    offset = 0
     jsonified = json.loads(response.text)
-    prevLaunch = jsonified["results"][0] #first launch in the results array
+    print(jsonified["next"])
+    while pos >= len(jsonified["results"]) + offset:
+        offset +=10
+        response = requests.get("https://ll.thespacedevs.com/2.0.0/launch/previous/?limit=10&offset="+str(offset))
+        jsonified = json.loads(response.text)
+    print(jsonified["next"])
+    prevLaunch = jsonified["results"][pos-offset] #first launch in the results array
     launchDate = prevLaunch["net"].split("T")[0]
     launchTime = prevLaunch["net"].split("T")[1][:8]
 
@@ -72,10 +96,15 @@ def formatEventInfo(event, eventDateTime):
 
     return prettyString
 
-def getNextEvent():
+def getNextEvent(pos=0):
     response = requests.get("https://ll.thespacedevs.com/2.0.0/event/upcoming/") # gets all upcoming launches
+    offset = 0
     jsonified = json.loads(response.text)
-    nextEvent = jsonified["results"][0] #first launch in the results array
+    while pos >= len(jsonified["results"]) + offset:
+        offset +=10
+        response = requests.get("https://ll.thespacedevs.com/2.0.0/event/upcoming/?limit=10&offset="+str(offset))
+        jsonified = json.loads(response.text)
+    nextEvent = jsonified["results"][pos-offset] #first launch in the results array
     eventDate = nextEvent["date"].split("T")[0]
     eventTime = nextEvent["date"].split("T")[1][:8]
 
@@ -83,10 +112,15 @@ def getNextEvent():
 
     return formatEventInfo(nextEvent, eventDateTime), nextEvent['video_url']
 
-def getPrevEvent():
+def getPrevEvent(pos=0):
     response = requests.get("https://ll.thespacedevs.com/2.0.0/event/previous/") # gets all upcoming launches
     jsonified = json.loads(response.text)
-    prevEvent = jsonified["results"][0] #first launch in the results array
+    offset = 0
+    while pos >= len(jsonified["results"]) + offset:
+        offset +=10
+        response = requests.get("https://ll.thespacedevs.com/2.0.0/event/previous/?limit=10&offset="+str(offset))
+        jsonified = json.loads(response.text)
+    prevEvent = jsonified["results"][pos-offset] #first launch in the results array
     eventDate = prevEvent["date"].split("T")[0]
     eventTime = prevEvent["date"].split("T")[1][:8]
 

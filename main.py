@@ -19,10 +19,14 @@ async def on_message(message):
         # is command
         commandList = [
             ["nextLaunch", "Sends data on the next rocket to launch."],
+            ["futureLaunch [index]", "Sends data on a future launch. Index 0 is the soonest launch, index 1 is the launch after that, etc."],
             ["prevLaunch", "Sends data on the most recent rocket launch."],
+            ["pastLaunch [index]", "Sends data on a past launch. Index 0 is the most recent launch, index 1 is the launch before that, etc."],
             ["getLaunch [keyword]", "Searches for a launch and returns data if found."],
             ["nextEvent", "Sends data on the next space event."],
+            ["futureEvent [index]", "Sends data on a future event. Index 0 is the soonest event, index 1 is the event after that, etc."],
             ["prevEvent", "Sends data on the most recent space event."],
+            ["pastEvent [index]", "Sends data on a past event. Index 0 is the most recent event, index 1 is the event before that, etc."],
             ["getEvent [keyword]", "Searches for an event and returns data if found."]
         ]
         command = message.content[2:].lower() # lowercase command name
@@ -35,9 +39,23 @@ async def on_message(message):
         elif command == "nextlaunch":
             await message.channel.send(fun.getNextLaunch())
             # next launch from Launch Library
+        elif command[:12] == "futurelaunch":
+            if len(command) > 13 and command[13:].isdigit():
+                await message.channel.send(fun.getNextLaunch(pos=int(command[13:])))
+            else:
+                embed = discord.Embed()
+                embed.description = "{} is an invalid value.".format(command[13:])
+                await message.channel.send(embed=embed)
         elif command == "prevlaunch":
             await message.channel.send(fun.getPrevLaunch())
             # most recent launch
+        elif command[:10] == "pastlaunch":
+            if len(command) > 11 and command[11:].isdigit():
+                await message.channel.send(fun.getPrevLaunch(pos=int(command[11:])))
+            else:
+                embed = discord.Embed()
+                embed.description = "{} is an invalid value.".format(command[11:])
+                await message.channel.send(embed=embed)
         elif command[:8] == "getevent":
             event = fun.getNameEvent(command[10:])
             await message.channel.send(event[0])
@@ -58,6 +76,13 @@ async def on_message(message):
             embed.description = "Watch the event [here]({}).".format(event[1])
             await message.channel.send(embed=embed)
             # get the next space event
+        elif command[:11] == "futureevent":
+            if len(command) > 12 and command[12:].isdigit():
+                await message.channel.send(fun.getNextEvent(pos=int(command[12:])))
+            else:
+                embed = discord.Embed()
+                embed.description = "{} is an invalid value.".format(command[12:])
+                await message.channel.send(embed=embed)
         elif command == "prevevent":
             event = fun.getPrevEvent()
             await message.channel.send(event[0])
@@ -65,6 +90,13 @@ async def on_message(message):
             embed.description = "Watch the event [here]({}).".format(event[1])
             await message.channel.send(embed=embed)
             # get the most recent space event
+        elif command[:9] == "pastevent":
+            if len(command) > 10 and command[10:].isdigit():
+                await message.channel.send(fun.getNextLaunch(pos=int(command[10:])))
+            else:
+                embed = discord.Embed()
+                embed.description = "{} is an invalid value.".format(command[10:])
+                await message.channel.send(embed=embed)
         else:
             embed = discord.Embed()
             embed.description = "I don't know that command. Please use `r!help` for a list of my commands."
