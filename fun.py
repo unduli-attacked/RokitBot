@@ -26,7 +26,7 @@ def formatLaunchInfo(launchJson, launchDateTime):
 def getNextLaunch():
     response = requests.get("https://ll.thespacedevs.com/2.0.0/launch/upcoming/") # gets all upcoming launches
     jsonified = json.loads(response.text)
-    if not jsonified['detail'] == None:
+    if "detail" in jsonified:
         return "Unable to access API"
     nextLaunch = jsonified["results"][0] #first launch in the results array
     print(len(jsonified["results"]))
@@ -40,7 +40,7 @@ def getNextLaunch():
 def getPrevLaunch():
     response = requests.get("https://ll.thespacedevs.com/2.0.0/launch/previous/") # gets all upcoming launches
     jsonified = json.loads(response.text)
-    if not jsonified['detail'] == None:
+    if "detail" in jsonified:
         return "Unable to access API"
     prevLaunch = jsonified["results"][0] #first launch in the results array
     launchDate = prevLaunch["net"].split("T")[0]
@@ -53,7 +53,7 @@ def getPrevLaunch():
 def getNameLaunch(name):
     response = requests.get("https://ll.thespacedevs.com/2.0.0/launch/?search="+urllib.parse.quote(name)) # searches for launch
     jsonified = json.loads(response.text)
-    if not jsonified['detail'] == None:
+    if "detail" in jsonified:
         return "Unable to access API"
     if len(jsonified['results']) == 0:
         return "Not found."
@@ -82,7 +82,7 @@ def formatEventInfo(event, eventDateTime):
 def getNextEvent():
     response = requests.get("https://ll.thespacedevs.com/2.0.0/event/upcoming/") # gets all upcoming launches
     jsonified = json.loads(response.text)
-    if not jsonified['detail'] == None:
+    if "detail" in jsonified:
         return "Unable to access API"
     nextEvent = jsonified["results"][0] #first launch in the results array
     eventDate = nextEvent["date"].split("T")[0]
@@ -95,7 +95,7 @@ def getNextEvent():
 def getPrevEvent():
     response = requests.get("https://ll.thespacedevs.com/2.0.0/event/previous/") # gets all upcoming launches
     jsonified = json.loads(response.text)
-    if not jsonified['detail'] == None:
+    if "detail" in jsonified:
         return "Unable to access API"
     prevEvent = jsonified["results"][0] #first launch in the results array
     eventDate = prevEvent["date"].split("T")[0]
@@ -108,7 +108,7 @@ def getPrevEvent():
 def getNameEvent(name):
     response = requests.get("https://ll.thespacedevs.com/2.0.0/event/?search="+urllib.parse.quote(name)) # gets all upcoming launches
     jsonified = json.loads(response.text)
-    if not jsonified['detail'] == None:
+    if "detail" in jsonified:
         return "Unable to access API"
     if len(jsonified['results']) == 0:
         return "Not found."
