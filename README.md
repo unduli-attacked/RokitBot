@@ -1,7 +1,7 @@
 # RokitBot
 A Python-based Discord bot using data from [Launch Library 2](https://thespacedevs.com/llapi).
 
-Hello
+
 ## Commanded Features
 | Command | Result |
 | ------- | ------ |
